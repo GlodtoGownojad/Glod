@@ -1,11 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090614">
+<title>Tokyo after dark</title>
+<style>
+  :root { color-scheme: dark; --pink: #ff38ac; --cyan: #55f8ef; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #090614; color: #fff; overflow: hidden; font-family: 'Courier New', monospace; }
+  .night { position: relative; height: 100svh; min-height: 320px; isolation: isolate; overflow: hidden; background: radial-gradient(ellipse at 50% 50%, #41134366, transparent 52%), linear-gradient(#090614, #170d25 62%, #100b1c); }
+  .aura { position: absolute; inset: 0; background: radial-gradient(ellipse at 12% 65%, #02b4cf18, transparent 40%), radial-gradient(ellipse at 88% 40%, #ff00802a, transparent 35%); animation: breathe 9s ease-in-out infinite alternate; }
+  .moon { position: absolute; width: 130px; aspect-ratio: 1; top: 13%; right: 21%; border-radius: 50%; background: #fdb1d6; box-shadow: 0 0 55px #ff69bd33, 0 0 130px #ff69bd22; opacity: .3; }
+  .moon:after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: repeating-linear-gradient(0deg, transparent 0 7px, #130c25 8px 10px); }
+  .skyline { position: absolute; inset: 0; pointer-events: none; }
+  .building { position: absolute; bottom: 22%; background: linear-gradient(90deg, #090917, #111020); border-top: 1px solid #50415c70; border-left: 1px solid #3f284a65; }
+  .building:before { content: ''; position: absolute; width: 1px; height: 28px; background: #473251; top: -28px; left: 66%; }
+  .building:after { content: ''; position: absolute; inset: 15px 10px 0; opacity: .32; background: repeating-linear-gradient(0deg, transparent 0 15px, #090917 15px 25px), repeating-linear-gradient(90deg, #df65975c 0 4px, transparent 4px 14px); }
+  .back { opacity: .4; filter: blur(1px); }
+  .ground { position: absolute; left: -30%; right: -30%; height: 36%; bottom: -12%; background: repeating-linear-gradient(90deg, transparent 0 119px, #bc439313 120px 121px), repeating-linear-gradient(0deg, transparent 0 49px, #48d7dd13 50px 51px), linear-gradient(#170d25, #080713); transform: perspective(350px) rotateX(47deg); transform-origin: center top; border-top: 1px solid #fa59b42b; }
+  .reflection { position: absolute; width: 68%; height: 24%; left: 16%; top: 76%; background: radial-gradient(ellipse at 50% 0%, #ff269751, transparent 67%); filter: blur(14px); transform: scaleY(.8); animation: breathe 4s ease-in-out infinite alternate; }
+  .reflection:after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, #090614 0 3px, transparent 3px 9px); }
+  .sign { position: absolute; z-index: 2; padding: 15px 11px; font-family: sans-serif; writing-mode: vertical-rl; font-weight: 700; letter-spacing: 9px; background: #120e20e0; border: 2px solid currentColor; border-radius: 3px; }
+  .sign-left { left: 5.5%; top: 26%; color: var(--cyan); font-size: 27px; box-shadow: 0 0 12px #55f8ef45, inset 0 0 12px #55f8ef25; text-shadow: 0 0 10px #55f8ef; transform: rotate(-3deg); animation: sign-flicker 9s infinite; }
+  .sign-right { right: 6%; top: 38%; color: var(--pink); font-size: 31px; box-shadow: 0 0 16px #ff38ac55, inset 0 0 12px #ff38ac20; text-shadow: 0 0 12px #ff38ac; transform: rotate(3deg); }
+  .sign-small { left: 16%; top: 62%; color: #b493ff; font-size: 16px; padding: 10px 7px; text-shadow: 0 0 9px #ac7cff; opacity: .6; }
+  .wire { position: absolute; top: -75px; left: -10%; width: 125%; height: 220px; border-bottom: 2px solid #03030a; border-radius: 0 0 50% 50%; transform: rotate(-7deg); z-index: 3; }
+  .wire.second { top: -120px; transform: rotate(8deg); height: 260px; }
+  .lamp { position: absolute; left: 83%; top: 0; height: 23%; width: 2px; background: #090611; }
+  .lamp:after { content: ''; position: absolute; width: 20px; height: 7px; bottom: 0; left: -9px; border-radius: 50%; background: #9afafa; box-shadow: 0 0 25px 8px #20dddd55, 0 25px 70px 18px #20dddd22; }
+  .hero { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; padding-bottom: 3vh; }
+  .overline { color: #e3adc5; letter-spacing: .5em; font-size: 10px; margin-bottom: 29px; display: flex; align-items: center; gap: 16px; }
+  .overline:before,.overline:after { content: ''; width: 34px; height: 1px; background: #eb62a975; box-shadow: 0 0 10px #ff38ac; }
+  .title-wrap { position: relative; width: 80%; text-align: center; transform: rotate(-5deg); animation: float 6s ease-in-out infinite; }
+  h1 { position: relative; display: inline-block; margin: 0; max-width: 100%; font-family: Impact, 'Arial Black', sans-serif; font-size: clamp(64px, 20vw, 310px); font-weight: 900; line-height: 1.1; letter-spacing: -.045em; color: #fff1f8; -webkit-text-stroke: 1px #ffc6e9; text-shadow: 0 0 5px #fff, 0 0 15px #ff80c6, 0 0 40px #ff1594, 0 0 95px #ed007b99, 5px 7px 0 #5c123e; }
+  h1:before,h1:after { content: attr(data-text); position: absolute; inset: 0; pointer-events: none; opacity: 0; -webkit-text-stroke: 0; }
+  h1:before { color: var(--cyan); text-shadow: -5px 0 var(--cyan); animation: glitch 7.7s infinite; }
+  h1:after { color: var(--pink); text-shadow: 5px 0 var(--pink); animation: glitch 7.7s .12s infinite reverse; }
+  .underline { height: 3px; width: 62%; margin: 15px auto 0; background: #ffc6e9; box-shadow: 0 0 6px #fff, 0 0 15px #ff1594, 0 0 30px #ff1594; position: relative; }
+  .underline:after { content: ''; position: absolute; right: 0; top: -3px; height: 9px; width: 9px; border-radius: 50%; background: white; box-shadow: 0 0 15px 4px #ff38ac; animation: spark 4.5s infinite; }
+  .under { margin: 42px 0 0; font-size: 10px; color: #b783a5; letter-spacing: .38em; }
+  .under span { color: #53e9db; text-shadow: 0 0 12px #53e9db88; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
+  .scanlines { position: absolute; inset: 0; z-index: 7; pointer-events: none; opacity: .19; background: repeating-linear-gradient(0deg, #0008 0 1px, transparent 1px 4px); }
+  .vignette { position: absolute; inset: 0; z-index: 8; pointer-events: none; box-shadow: inset 0 0 140px 40px #03020b99; }
+  .hud { position: absolute; inset: 30px 35px; z-index: 9; pointer-events: none; color: #b28ba5; font-size: 9px; letter-spacing: 2px; }
+  .hud-top,.hud-bottom { display: flex; justify-content: space-between; align-items: center; }
+  .hud-bottom { position: absolute; bottom: 0; width: 100%; font-size: 8px; }
+  .live { display: inline-block; width: 5px; height: 5px; background: var(--pink); border-radius: 50%; margin-right: 9px; box-shadow: 0 0 8px var(--pink); animation: breathe 2s infinite alternate; }
+  .corner { position: absolute; width: 13px; height: 13px; border-color: #a86b9860; border-style: solid; }
+  .tl { top: 64px; left: 35px; border-width: 1px 0 0 1px; }.tr { top: 64px; right: 35px; border-width: 1px 1px 0 0; }.bl { bottom: 64px; left: 35px; border-width: 0 0 1px 1px; }.br { bottom: 64px; right: 35px; border-width: 0 1px 1px 0; }
+  @keyframes float { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-12px) rotate(-3deg); } }
+  @keyframes breathe { from { opacity: .45; } to { opacity: 1; } }
+  @keyframes glitch { 0%,92%,96%,100% { opacity: 0; transform: translate(0); clip-path: inset(0); } 93% { opacity: .85; transform: translate(-7px,2px); clip-path: inset(20% 0 61%); } 94% { opacity: .85; transform: translate(6px,-2px); clip-path: inset(63% 0 20%); } 95% { opacity: .5; transform: translate(-3px); clip-path: inset(42% 0 43%); } }
+  @keyframes sign-flicker { 0%,42%,46%,100% { opacity: .85; } 43%,45% { opacity: .3; } 44% { opacity: .7; } }
+  @keyframes spark { 0%,86%,90%,100% { opacity: .3; transform: scale(.5); } 88% { opacity: 1; transform: scale(1.5); } }
+  @media(max-width:600px) { .moon { width: 90px; right: 18%; top: 19%; }.sign-left { left: 4%; top: 22%; font-size: 18px; }.sign-right { right: 5%; top: 62%; font-size: 20px; }.sign-small { top: 69%; left: 10%; font-size: 12px; }.hud { inset: 24px 20px; font-size: 8px; letter-spacing: 1px; }.hud-bottom { font-size: 7px; }.overline { font-size: 8px; letter-spacing: .3em; margin-bottom: 24px; }.under { font-size: 8px; letter-spacing: .2em; margin-top: 32px; }.title-wrap { width: 88%; }.vignette { box-shadow: inset 0 0 80px 10px #03020b88; }.corner { display: none; } }
+  @media(prefers-reduced-motion:reduce) { *,*:before,*:after { animation: none!important; } }
+</style>
 </head>
 <body>
-    <h1>GŁOD TO CWEL</h1>
+<main class="night">
+  <div class="aura" aria-hidden="true"></div>
+  <div class="moon" aria-hidden="true"></div>
+  <div class="skyline back" id="far-city" aria-hidden="true"></div>
+  <div class="skyline" id="city" aria-hidden="true"></div>
+  <div class="ground" aria-hidden="true"></div>
+  <div class="reflection" aria-hidden="true"></div>
+  <div aria-hidden="true">
+    <div class="wire"></div><div class="wire second"></div><div class="lamp"></div>
+    <div class="sign sign-left">ネオン</div><div class="sign sign-right">東京</div><div class="sign sign-small">深夜営業</div>
+  </div>
+  <div class="hero">
+    <div class="overline" aria-hidden="true">Misza</div>
+    <div class="title-wrap">
+      <!-- ZMIEŃ TYLKO TEKST PONIŻEJ — EFEKTY DOPASUJĄ SIĘ SAME -->
+      <h1 id="title">Glod To Ucho</h1>
+      <div class="underline" aria-hidden="true"></div>
+    </div>
+    <p class="under" aria-hidden="true">Malutka. <span>Zielonka.</span></p>
+  </div>
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div><div class="vignette" aria-hidden="true"></div>
+  <div class="hud" aria-hidden="true"><div class="hud-top"><span></span><span>ネオンの夢 / 03:47 AM</span></div><div class="hud-bottom"><span>35°40′ N &nbsp; 139°42′ E</span><span>眠らない街 &nbsp; ✳ &nbsp; VOL. 001</span></div></div>
+  <div aria-hidden="true"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></div>
+</main>
+<script>
+  const title = document.getElementById('title');
+  title.dataset.text = title.textContent;
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  // Powtarzalna panorama: bez obrazków, bibliotek i zewnętrznych plików.
+  let seed = 27;
+  function random() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  for (const [id, count, distant] of [['far-city', 27, true], ['city', 18, false]]) {
+    const city = document.getElementById(id);
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div'); b.className = 'building';
+      const edge = Math.abs(i / count - .5) * 2;
+      b.style.cssText = `left:${i / count * 100}%;width:${100 / count + .5}%;height:${(distant ? 24 : 12) + random() * 20 + edge * 17}%;${distant ? 'bottom:26%;' : ''}`;
+      city.appendChild(b);
+    }
+  }
+  function fitTitle() {
+    title.style.fontSize = '';
+    const available = title.parentElement.clientWidth;
+    let size = parseFloat(getComputedStyle(title).fontSize);
+    if (title.scrollWidth > available) { size *= available / title.scrollWidth; title.style.fontSize = `${size}px`; }
+  }
+  const canvas = document.getElementById('rain'), ctx = canvas.getContext('2d');
+  let w = 0, h = 0, drops = [], motes = [], frame = 0, last = 0;
+  function resize() {
+    w = innerWidth; h = document.querySelector('.night').clientHeight;
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drops = Array.from({ length: Math.min(180, Math.round(w / 8)) }, () => ({ x: random() * w, y: random() * h, speed: 240 + random() * 440, length: 9 + random() * 23, a: .06 + random() * .2 }));
+    motes = Array.from({ length: 22 }, () => ({ x: random() * w, y: random() * h, speed: 6 + random() * 14, r: .6 + random() * 1.1 }));
+    fitTitle(); draw(0);
+  }
+  function draw(dt) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineWidth = .7;
+    for (const d of drops) {
+      d.y += d.speed * dt; d.x -= d.speed * .16 * dt;
+      if (d.y > h + 35) { d.y = -35; d.x = random() * (w + 100); }
+      if (d.x < -40) d.x = w + 40;
+      ctx.strokeStyle = `rgba(177,174,227,${d.a})`;
+      ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d.x - d.length * .16, d.y + d.length); ctx.stroke();
+    }
+    for (const p of motes) {
+      p.y -= p.speed * dt; p.x += Math.sin(p.y / 90) * dt * 5;
+      if (p.y < -5) p.y = h + 5;
+      ctx.fillStyle = '#ff82c880'; ctx.shadowColor = '#ff38ac'; ctx.shadowBlur = 9;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+  }
+  function loop(now) { frame = 0; const dt = last ? Math.min((now - last) / 1000, .05) : 0; last = now; draw(dt); frame = requestAnimationFrame(loop); }
+  function sync() { cancelAnimationFrame(frame); last = 0; if (!motion.matches && !document.hidden) frame = requestAnimationFrame(loop); }
+  addEventListener('resize', resize); document.addEventListener('visibilitychange', sync); motion.addEventListener('change', sync);
+  resize(); sync();
+</script>
 </body>
 </html>
+
